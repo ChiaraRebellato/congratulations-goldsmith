@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ce l'hai fatta!!</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            text-align: center;
+            color: #4a4a4a;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+            z-index: 10;
+            animation: popIn 1s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #ff477e;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Animazione Centrale */
+        .animation-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 25px;
+        }
+
+        .main-star {
+            font-size: 100px;
+            animation: pulse Bounce 2s infinite ease-in-out;
+            display: inline-block;
+        }
+
+        /* Pulsante Musica */
+        .audio-control {
+            background-color: #ff477e;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4);
+        }
+
+        .audio-control:hover {
+            background-color: #ff7096;
+            transform: scale(1.05);
+        }
+
+        /* Cagnolini Volanti / Coriandoli */
+        .dog-confetti {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        /* Keyframes Animazioni */
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes Bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="./congratulations.m4a" type="audio/mpeg">
+        Il tuo browser non supporta l'elemento audio.
+    </audio>
+
+    <div class="container">
+        <h1>Congratulations super goldsmith!!</h1>
+        <p>
+            Io non avevo dubbi... sapevo che con due gocce di Bach tutto sarebbe andato per il meglio 🙂‍↔️ <br/>
+            Sei riuscita a superare anche questa paura, stai proprio crescendo!!
+            Ora vai a fare detox con un gin tonic per festeggiare!! 
+        </p>
+        
+        <div class="animation-container">
+            <span class="main-star">🏆</span>
+        </div>
+
+        <button class="audio-control" onclick="startParty()">Dai inizio alla festa! 🐾</button>
+    </div>
+
+    <script>
+        function startParty() {
+            // Avvia la musica
+            const music = document.getElementById('bg-music');
+            if (music.paused) {
+                music.play();
+                document.querySelector('.audio-control').innerText = "Musica ON! 🎶";
+            } else {
+                music.pause();
+                document.querySelector('.audio-control').innerText = "Riprendi la festa! 🐾";
+                return;
+            }
+
+            // Attiva la pioggia di cagnolini festosi
+            const dogEmojis = ['🐶', '🐕', '🐩', '🐾', '🎉', '✨', '🧁'];
+            
+            setInterval(() => {
+                const confetti = document.createElement('div');
+                confetti.classList.add('dog-confetti');
+                
+                // Sceglie un'emoji a caso dall'elenco
+                confetti.innerText = dogEmojis[Math.floor(Math.random() * dogEmojis.length)];
+                
+                // Posizione orizzontale casuale
+                confetti.style.left = Math.random() * 100 + 'vw';
+                
+                // Velocità di caduta casuale (tra 3 e 6 secondi)
+                confetti.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                document.body.appendChild(confetti);
+
+                // Rimuove l'elemento dopo la caduta per non sovraccaricare la pagina
+                setTimeout(() => {
+                    confetti.remove();
+                }, 6000);
+            }, 300); // Crea un nuovo cagnolino ogni 300ms
+        }
+    </script>
+
+</body>
+</html>
