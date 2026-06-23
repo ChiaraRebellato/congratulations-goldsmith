@@ -147,16 +147,18 @@
         </div>
     </div>
 
-    <script>
+<script>
         const music = document.getElementById('bg-music');
         const button = document.querySelector('.audio-control');
         let partyStarted = false;
+        let isPlaying = false; // Variabile di stato per evitare i falsi positivi di music.paused
 
-        // FIX SAFARI: Sblocca l'interfaccia audio al primo tocco sullo schermo
+        // Sblocca l'audio sui browser iOS appena l'utente tocca un punto QUALSIASI della pagina
         function sbloccaAudioSafari() {
             music.play().then(() => {
                 music.pause();
-            }).catch(e => console.log("In attesa..."));
+                music.currentTime = 0; // Resetta la traccia all'inizio
+            }).catch(e => console.log("In attesa di interazione..."));
             
             document.removeEventListener('touchstart', sbloccaAudioSafari);
             document.removeEventListener('click', sbloccaAudioSafari);
@@ -165,30 +167,38 @@
         document.addEventListener('click', sbloccaAudioSafari);
 
         function startParty() {
-            if (music.paused) {
-                // FIX CRUCIALE: Forza Safari a reinizializzare il file m4a da zero
-                if(music.readyState === 0) {
+            // Se la musica NON sta andando, la facciamo partire
+            if (!isPlaying) {
+                if (music.readyState === 0) {
                     music.load();
                 }
                 
                 music.play()
                     .then(() => {
+                        isPlaying = true;
                         button.innerText = "Musica ON! 🎶";
+                        attivaCagnolini(); // Avvia la pioggia di emoji
                     })
                     .catch(e => {
-                        // Estremo tentativo: se Safari fa ancora muro, prova a mutare e smutare al volo
+                        // Fallback estremo per Safari mobile
                         music.muted = true;
                         music.play().then(() => {
                             music.muted = false;
+                            isPlaying = true;
                             button.innerText = "Musica ON! 🎶";
+                            attivaCagnolini();
                         });
                     });
             } else {
+                // Se invece stava già andando, la mettiamo in pausa
                 music.pause();
+                isPlaying = false;
                 button.innerText = "Riprendi la festa! 🐾";
-                return;
             }
+        }
 
+        function attivaCagnolini() {
+            // Evita di duplicare i cicli se si clicca Play/Pausa più volte
             if (partyStarted) return;
             partyStarted = true;
 
@@ -196,6 +206,9 @@
             const wrapper = document.getElementById('wrapper');
             
             setInterval(() => {
+                // Genera i coriandoli solo se la musica è attiva in quel momento
+                if (!isPlaying) return; 
+
                 const confetti = document.createElement('div');
                 confetti.classList.add('dog-confetti');
                 confetti.innerText = dogEmojis[Math.floor(Math.random() * dogEmojis.length)];
