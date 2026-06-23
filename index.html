@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ce l'hai fatta!!</title>
     <style>
         * {
@@ -11,59 +11,67 @@
             padding: 0;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
-            min-height: 100vh;
+        .page-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden;
-            text-align: center;
-            color: #4a4a4a;
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
             padding: 20px;
         }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #4a4a4a;
+            text-align: center;
+            background-color: #ffe5ec;
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 30px 20px;
             border-radius: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            max-width: 600px;
-            width: 100%;
+            -webkit-backdrop-filter: blur(10px);
             z-index: 10;
             animation: popIn 1s ease-out;
+            width: 90%;
+            max-width: 360px;
+            word-wrap: break-word;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 1.7rem;
             color: #ff477e;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         p {
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             line-height: 1.6;
             margin-bottom: 25px;
         }
 
-        /* Animazione Centrale */
         .animation-container {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 120px;
+            height: 120px;
             margin: 0 auto 25px;
         }
 
         .main-star {
-            font-size: 100px;
-            animation: pulse Bounce 2s infinite ease-in-out;
+            font-size: 80px;
+            animation: Bounce 2s infinite ease-in-out; 
             display: inline-block;
         }
 
-        /* Pulsante Musica */
         .audio-control {
             background-color: #ff477e;
             color: white;
@@ -75,6 +83,7 @@
             cursor: pointer;
             transition: transform 0.2s, background-color 0.2s;
             box-shadow: 0 5px 15px rgba(255, 71, 126, 0.4);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .audio-control:hover {
@@ -82,10 +91,9 @@
             transform: scale(1.05);
         }
 
-        /* Cagnolini Volanti / Coriandoli */
         .dog-confetti {
-            position: fixed;
-            top: -50px;
+            position: absolute;
+            top: -60px;
             font-size: 2rem;
             user-select: none;
             pointer-events: none;
@@ -93,7 +101,6 @@
             animation: fall linear infinite;
         }
 
-        /* Keyframes Animazioni */
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -101,7 +108,7 @@
 
         @keyframes Bounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.1); }
+            50% { transform: translateY(-15px) scale(1.05); }
         }
 
         @keyframes fall {
@@ -110,7 +117,7 @@
                 opacity: 1;
             }
             100% {
-                transform: translateY(105vh) rotate(360deg);
+                transform: translateY(115vh) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -118,64 +125,92 @@
 </head>
 <body>
 
-    <audio id="bg-music" loop>
-        <source src="./congratulations.m4a" type="audio/mpeg">
+    <audio id="bg-music" loop preload="none">
+        <source src="./congratulations.m4a" type="audio/mp4">
         Il tuo browser non supporta l'elemento audio.
     </audio>
 
-    <div class="container">
-        <h1>Congratulations super goldsmith!!</h1>
-        <p>
-            Io non avevo dubbi... sapevo che con due gocce di Bach tutto sarebbe andato per il meglio 🙂‍↔️ <br/>
-            Sei riuscita a superare anche questa paura, stai proprio crescendo!!
-            Ora vai a fare detox con un gin tonic per festeggiare!! 
-        </p>
-        
-        <div class="animation-container">
-            <span class="main-star">🏆</span>
-        </div>
+    <div class="page-wrapper" id="wrapper">
+        <div class="container">
+            <h1>Congratulations <br/>super goldsmith!!</h1>
+            <p>
+                Io non avevo dubbi... sapevo che con due gocce di Bach tutto sarebbe andato per il meglio 🙂‍↔️ <br/><br/>
+                Sei riuscita a superare anche questa paura, stai proprio crescendo!!
+                Ora vai a fare detox con un gin tonic per festeggiare!! 
+            </p>
+            
+            <div class="animation-container">
+                <span class="main-star">🏆</span>
+            </div>
 
-        <button class="audio-control" onclick="startParty()">Dai inizio alla festa! 🐾</button>
+            <button class="audio-control" onclick="startParty()">Dai inizio alla festa! 🐾</button>
+        </div>
     </div>
 
     <script>
+        const music = document.getElementById('bg-music');
+        const button = document.querySelector('.audio-control');
+        let partyStarted = false;
+
+        // FIX SAFARI: Sblocca l'interfaccia audio al primo tocco sullo schermo
+        function sbloccaAudioSafari() {
+            music.play().then(() => {
+                music.pause();
+            }).catch(e => console.log("In attesa..."));
+            
+            document.removeEventListener('touchstart', sbloccaAudioSafari);
+            document.removeEventListener('click', sbloccaAudioSafari);
+        }
+        document.addEventListener('touchstart', sbloccaAudioSafari, { passive: true });
+        document.addEventListener('click', sbloccaAudioSafari);
+
         function startParty() {
-            // Avvia la musica
-            const music = document.getElementById('bg-music');
             if (music.paused) {
-                music.play();
-                document.querySelector('.audio-control').innerText = "Musica ON! 🎶";
+                // FIX CRUCIALE: Forza Safari a reinizializzare il file m4a da zero
+                if(music.readyState === 0) {
+                    music.load();
+                }
+                
+                music.play()
+                    .then(() => {
+                        button.innerText = "Musica ON! 🎶";
+                    })
+                    .catch(e => {
+                        // Estremo tentativo: se Safari fa ancora muro, prova a mutare e smutare al volo
+                        music.muted = true;
+                        music.play().then(() => {
+                            music.muted = false;
+                            button.innerText = "Musica ON! 🎶";
+                        });
+                    });
             } else {
                 music.pause();
-                document.querySelector('.audio-control').innerText = "Riprendi la festa! 🐾";
+                button.innerText = "Riprendi la festa! 🐾";
                 return;
             }
 
-            // Attiva la pioggia di cagnolini festosi
+            if (partyStarted) return;
+            partyStarted = true;
+
             const dogEmojis = ['🐶', '🐕', '🐩', '🐾', '🎉', '✨', '🧁'];
+            const wrapper = document.getElementById('wrapper');
             
             setInterval(() => {
                 const confetti = document.createElement('div');
                 confetti.classList.add('dog-confetti');
-                
-                // Sceglie un'emoji a caso dall'elenco
                 confetti.innerText = dogEmojis[Math.floor(Math.random() * dogEmojis.length)];
                 
-                // Posizione orizzontale casuale
-                confetti.style.left = Math.random() * 100 + 'vw';
-                
-                // Velocità di caduta casuale (tra 3 e 6 secondi)
+                const maxWidth = window.innerWidth - 40;
+                confetti.style.left = Math.random() * maxWidth + 'px';
                 confetti.style.animationDuration = (Math.random() * 3 + 3) + 's';
                 
-                document.body.appendChild(confetti);
+                wrapper.appendChild(confetti);
 
-                // Rimuove l'elemento dopo la caduta per non sovraccaricare la pagina
                 setTimeout(() => {
                     confetti.remove();
                 }, 6000);
-            }, 300); // Crea un nuovo cagnolino ogni 300ms
+            }, 350);
         }
     </script>
-
 </body>
 </html>
